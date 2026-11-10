@@ -1,0 +1,77 @@
+{
+    "name":  "seguru-pro",
+    "private":  true,
+    "version":  "1.0.0",
+    "type":  "module",
+    "scripts":  {
+                    "dev":  "vite",
+                    "build":  "tsc -b \u0026\u0026 vite build",
+                    "lint":  "oxlint",
+                    "preview":  "vite preview",
+                    "build:electron":  "vite build --mode electron",
+                    "dist":  "vite build --mode electron \u0026\u0026 electron-builder --win nsis"
+                },
+    "dependencies":  {
+                         "@hookform/resolvers":  "^7.0.5",
+                         "@supabase/ssr":  "^0.12.7",
+                         "@supabase/supabase-js":  "^2.119.0",
+                         "clsx":  "^2.1.1",
+                         "date-fns":  "^4.4.0",
+                         "lucide-react":  "^1.70.0",
+                         "react":  "^19.3.1",
+                         "react-dom":  "^19.3.1",
+                         "react-hook-form":  "^7.91.0",
+                         "react-router-dom":  "^7.18.5",
+                         "sonner":  "^2.0.8",
+                         "tailwind-merge":  "^3.7.0",
+                         "zod":  "^4.6.7"
+                     },
+    "devDependencies":  {
+                            "@tailwindcss/vite":  "^4.3.5",
+                            "@types/node":  "^24.19.2",
+                            "@types/react":  "^19.3.0",
+                            "@types/react-dom":  "^19.3.0",
+                            "@vitejs/plugin-react":  "^6.1.2",
+                            "autoprefixer":  "^10.6.2",
+                            "electron":  "^33.4.11",
+                            "electron-builder":  "^25.1.8",
+                            "oxlint":  "^1.90.0",
+                            "postcss":  "^8.5.32",
+                            "tailwindcss":  "^4.3.5",
+                            "typescript":  "~7.0.2",
+                            "vite":  "^8.3.6"
+                        },
+    "description":  "SegurPro - Gestão de Corretora de Seguros",
+    "author":  "Robson Santos",
+    "main":  "electron/main.cjs",
+    "build":  {
+                  "appId":  "br.com.segurpro.app",
+                  "productName":  "SegurPro",
+                  "copyright":  "Robson Santos",
+                  "directories":  {
+                                      "buildResources":  "build",
+                                      "output":  "release"
+                                  },
+                  "files":  [
+                                "dist/**/*",
+                                "electron/**/*",
+                                "build/icon.png",
+                                "package.json"
+                            ],
+                  "win":  {
+                              "target":  [
+                                             "nsis"
+                                         ],
+                              "icon":  "build/icon.png"
+                          },
+                  "nsis":  {
+                               "oneClick":  false,
+                               "perMachine":  false,
+                               "allowToChangeInstallationDirectory":  true,
+                               "createDesktopShortcut":  true,
+                               "createStartMenuShortcut":  true,
+                               "shortcutName":  "SegurPro",
+                               "artifactName":  "SegurPro-Setup-${version}.exe"
+                           }
+              }
+}
