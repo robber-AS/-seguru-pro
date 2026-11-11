@@ -3,7 +3,7 @@ import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/useToast";
 import { Button, Input, Badge, Table, Modal } from "@/components/ui";
-import { ShieldAlert, Search, RefreshCw, User, Plus } from "lucide-react";
+import { ShieldAlert, Search, RefreshCw, User, Plus, Trash2 } from "lucide-react";
 import { formatDate, textMatch, validateEmail } from "@/lib/utils";
 
 export const AuditPage = () => {
@@ -104,6 +104,9 @@ export const UsersPage = () => {
   const [created, setCreated] = useState<{ email: string; password: string; full_name: string } | null>(null);
   const [roleChange, setRoleChange] = useState<{ user: any; newRole: "admin" | "corretor" } | null>(null);
   const [savingRole, setSavingRole] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [selectedUser, setSelectedUser] = useState<any>(null);
+  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
     if (role === "admin") loadUsers();
@@ -180,6 +183,33 @@ export const UsersPage = () => {
     }
   };
 
+  const handleDelete = (u: any) => {
+    setSelectedUser(u);
+    setDeleteOpen(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!selectedUser) return;
+    setDeleting(true);
+    try {
+      const { data, error: err } = await supabase.functions.invoke("admin-delete-user", { body: { user_id: selectedUser.id } });
+      if (err) {
+        let msg = err.message;
+        try { msg = (await (err as any).context?.json())?.error || msg; } catch { /* resposta sem JSON */ }
+        throw new Error(msg);
+      }
+      if (data?.error) throw new Error(data.error);
+      success("Usuário excluído", `${selectedUser.full_name || selectedUser.email} foi removido do sistema.`);
+      setDeleteOpen(false);
+      setSelectedUser(null);
+      loadUsers();
+    } catch (err: any) {
+      error("Erro ao excluir usuário", err.message || "Não foi possível excluir o usuário.");
+    } finally {
+      setDeleting(false);
+    }
+  };
+
   if (role !== "admin") {
     return (
       <div className="flex min-h-[60vh] items-center justify-center">
@@ -230,7 +260,7 @@ export const UsersPage = () => {
         </div>
         <div className="overflow-x-auto">
           <Table
-            columns={["Usuário", "E-mail", "Perfil", "Criado em", "Alterar perfil"]}
+            columns={["Usuário", "E-mail", "Perfil", "Criado em", "Ações"]}
             data={filtered.map((u) => {
               const isMe = u.id === profile?.id;
               return [
@@ -238,17 +268,25 @@ export const UsersPage = () => {
                 <span key="2" className="text-sm">{u.email || "-"}</span>,
                 <Badge key="3" variant={u.role === "admin" ? "danger" : "success"}>{u.role === "admin" ? "Administrador" : "Corretor"}</Badge>,
                 <span key="4" className="text-sm text-gray-500">{formatDate(u.created_at)}</span>,
-                <div key="5" className="min-w-[160px]">
+                <div key="5" className="flex items-center gap-2 min-w-[220px]">
                   <select
                     value={u.role}
                     disabled={isMe}
                     title={isMe ? "Você não pode alterar o seu próprio perfil" : undefined}
                     onChange={(e) => setRoleChange({ user: u, newRole: e.target.value as "admin" | "corretor" })}
-                    className="input-field w-full text-sm disabled:cursor-not-allowed"
+                    className="input-field text-sm disabled:cursor-not-allowed"
                   >
                     <option value="admin">Administrador</option>
                     <option value="corretor">Corretor</option>
                   </select>
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    disabled={isMe}
+                    title={isMe ? "Você não pode excluir o próprio usuário" : undefined}
+                    icon={<Trash2 className="h-4 w-4" />}
+                    onClick={() => handleDelete(u)}
+                  />
                 </div>,
               ];
             })}
@@ -328,6 +366,18 @@ export const UsersPage = () => {
             </div>
           </div>
         )}
+      </Modal>
+
+      {/* Confirmação de exclusão de usuário */}
+      <Modal isOpen={deleteOpen} onClose={() => setDeleteOpen(false)} title="Excluir Usuário" size="sm">
+        <div className="text-gray-700">
+          <p>Tem certeza que deseja excluir o usuário <strong>{selectedUser?.full_name || selectedUser?.email}</strong>?</p>
+          <p className="mt-2 text-sm text-gray-500">O acesso será desativado imediatamente e não poderá ser desfeito.</p>
+        </div>
+        <div className="flex justify-end gap-3 pt-4">
+          <Button variant="secondary" onClick={() => setDeleteOpen(false)}>Cancelar</Button>
+          <Button variant="danger" onClick={handleConfirmDelete} isLoading={deleting}>Excluir</Button>
+        </div>
       </Modal>
     </div>
   );
