@@ -192,7 +192,12 @@ export const UsersPage = () => {
     if (!selectedUser) return;
     setDeleting(true);
     try {
-      const { data, error: err } = await supabase.functions.invoke("admin-delete-user", { body: { user_id: selectedUser.id } });
+      const { data: { session } } = await supabase.auth.getSession();
+      const token = session?.access_token || "";
+      const { data, error: err } = await supabase.functions.invoke("admin-delete-user", {
+        body: { user_id: selectedUser.id },
+        headers: { Authorization: `Bearer ${token}` },
+      });
       if (err) {
         let msg = err.message;
         try { msg = (await (err as any).context?.json())?.error || msg; } catch { /* resposta sem JSON */ }
