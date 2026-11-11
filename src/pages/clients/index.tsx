@@ -5,7 +5,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/useToast";
 import { Button, Input, Card, CardHeader, CardBody, Badge, Modal, Table, Pagination } from "@/components/ui";
 import { Search, Plus, Edit2, Trash2, ChevronRight, Car as Vehicle, FileText, RefreshCw } from "lucide-react";
-import { formatCPF, formatCNPJ, formatDate, formatPhone, validateCPF, validateCNPJ, validateEmail, maskCPF, maskPhone, onlyDigits, cleanPayload, orSafe } from "@/lib/utils";
+import { formatCPF, formatCNPJ, formatDate, formatPhone, validateCPF, validateCNPJ, validateEmail, maskCPF, maskCNPJ, maskPhone, onlyDigits, cleanPayload, orSafe } from "@/lib/utils";
 
 export const ClientsList = () => {
   const { profile, role } = useAuth();
