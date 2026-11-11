@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import React, { useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/useToast";
-import { Button, Input, Card, Badge, Modal, Select, Checkbox, Table, Pagination } from "@/components/ui";
-import { Car, Bike as Motorcycle, Search, Plus, RefreshCw, MapPin, Pipette as Dropper, Fuel, Ruler, Building2, Calendar, Edit2, Trash2 } from "lucide-react";
-import { formatDate, onlyDigits, cleanPayload, missingFields, textMatch } from "@/lib/utils";
+import { Button, Input, Badge, Modal, Select, Table, Pagination } from "@/components/ui";
+import { Search, Plus, Edit2, Trash2 } from "lucide-react";
+import { onlyDigits, cleanPayload, missingFields, textMatch } from "@/lib/utils";
 
 const VEHICLE_TYPES = [
   { value: "car", label: "Automóvel" },
@@ -19,10 +18,9 @@ const USAGE_TYPES = ["Pessoal", "Comercial", "Misto", "Aluguel", "Transporte de 
 export const VehiclesList = () => {
   const { profile, role } = useAuth();
   const { success, error } = useToast();
-  const navigate = useNavigate();
   const [vehicles, setVehicles] = useState<any[]>([]);
   const [clients, setClients] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
@@ -35,7 +33,7 @@ export const VehiclesList = () => {
 
   const loadClients = async () => {
     let q = supabase.from("clients").select("id, full_name");
-    if (role === "corretor") q = q.eq("corretor_id", profile?.id);
+    if (role === "corretor") q = q.eq("corretor_id", profile?.id ?? "");
     const { data } = await q.order("full_name");
     setClients(data || []);
   };
@@ -235,7 +233,7 @@ function VehicleForm({ clients, onSave, initialData }: { clients: any[]; onSave:
         </div>
         <div>
           <label className="label-field">Placa</label>
-          <Input value={form.plate} onChange={(e) => setForm({ ...form, plate: e.target.value.toUpperCase() })} placeholder="ABC-1234" maxLength="7" />
+          <Input value={form.plate} onChange={(e) => setForm({ ...form, plate: e.target.value.toUpperCase() })} placeholder="ABC-1234" maxLength={7} />
         </div>
         <div>
           <label className="label-field">RENAVAM</label>
@@ -243,7 +241,7 @@ function VehicleForm({ clients, onSave, initialData }: { clients: any[]; onSave:
         </div>
         <div>
           <label className="label-field">Chassi</label>
-          <Input value={form.chassis} onChange={(e) => setForm({ ...form, chassis: e.target.value })} maxLength="17" />
+          <Input value={form.chassis} onChange={(e) => setForm({ ...form, chassis: e.target.value })} maxLength={17} />
         </div>
         <div>
           <label className="label-field">Cor</label>
@@ -275,7 +273,7 @@ function VehicleForm({ clients, onSave, initialData }: { clients: any[]; onSave:
         </div>
         <div>
           <label className="label-field">CEP de pernoite</label>
-          <Input value={form.sleep_cep} onChange={(e) => setForm({ ...form, sleep_cep: e.target.value.replace(/\D/g, "") })} placeholder="00000-000" maxLength="8" />
+          <Input value={form.sleep_cep} onChange={(e) => setForm({ ...form, sleep_cep: e.target.value.replace(/\D/g, "") })} placeholder="00000-000" maxLength={8} />
         </div>
         <div className="col-span-full">
           <label className="label-field">Observações</label>

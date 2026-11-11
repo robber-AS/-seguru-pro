@@ -3,26 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/useToast";
-import { Button, Input, Card, Badge, Table, Select, Modal } from "@/components/ui";
-import {
-  ShieldAlert,
-  Search,
-  RefreshCw,
-  User,
-  Edit2,
-  Trash2,
-  Clock,
-  Mail,
-  Plus,
-  Settings,
-  Bell,
-  Globe,
-  Save,
-  Download,
-  Lock,
-  ChevronRight,
-} from "lucide-react";
-import { formatDate, validateEmail, formatCNPJ, formatPhone, onlyDigits } from "@/lib/utils";
+import { Button, Input } from "@/components/ui";
+import { ShieldAlert, RefreshCw, User, Clock, Mail, Settings, Globe, Save, Download, Lock, ChevronRight } from "lucide-react";
+import { validateEmail, onlyDigits } from "@/lib/utils";
 
 export const SettingsPage = () => {
   const { user, profile, role, signOut, refreshProfile } = useAuth();
@@ -35,7 +18,7 @@ export const SettingsPage = () => {
   // Perfil
   const [form, setForm] = useState({
     full_name: profile?.full_name || "",
-    email: profile?.email || "",
+    email: user?.email || "",
     current_password: "",
     new_password: "",
     confirm_password: "",
@@ -56,7 +39,7 @@ export const SettingsPage = () => {
 
   useEffect(() => {
     if (profile) {
-      setForm({ full_name: profile.full_name || "", email: profile.email || "", current_password: "", new_password: "", confirm_password: "" });
+      setForm({ full_name: profile.full_name || "", email: user?.email || "", current_password: "", new_password: "", confirm_password: "" });
     }
     setLoading(false);
   }, [profile]);
@@ -116,7 +99,7 @@ export const SettingsPage = () => {
         action: "update_profile",
         table_name: "profiles",
         record_id: user?.id,
-        new_values: { full_name: form.full_name.trim(), email: form.email.trim().toLowerCase(), password_changed: !!form.new_password },
+        new_values: JSON.stringify({ full_name: form.full_name.trim(), email: form.email.trim().toLowerCase(), password_changed: !!form.new_password }),
       });
       success("Perfil atualizado com sucesso");
       setForm((f) => ({ ...f, current_password: "", new_password: "", confirm_password: "" }));
@@ -410,6 +393,7 @@ function CompanySection({ company, setCompany, onSave, saving, loading }: { comp
 }
 
 function UsersSection() {
+  const navigate = useNavigate();
   return (
     <div className="space-y-4 max-w-xl">
       <h3 className="text-sm font-semibold text-navy">Gerenciamento de Usuários</h3>
@@ -428,15 +412,15 @@ function UsersSection() {
 }
 
 function BackupSection({ role }: { role: string | null }) {
+  const { error } = useToast();
   const handleExport = async () => {
     if (role !== "admin") return error("Acesso restrito", "Apenas administradores podem exportar dados.");
-    if (role !== "admin") return error("Acesso restrito", "Apenas administradores podem exportar dados.");
     try {
-      const tables = ["clients", "vehicles", "insurers", "quotes", "policies", "renewals", "finance", "audit_logs"];
+      const tables = ["clients", "vehicles", "insurers", "quotes", "policies", "renewals", "commissions", "payments", "audit_logs"];
       const data: Record<string, any> = {};
       for (const t of tables) {
-        const { res: r } = await (supabase as any).from(t).select("*");
-        data[t] = r?.data || [];
+        const { data: rows } = await (supabase as any).from(t).select("*");
+        data[t] = rows || [];
       }
       const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
       const url = URL.createObjectURL(blob);

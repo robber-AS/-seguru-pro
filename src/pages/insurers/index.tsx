@@ -1,18 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { supabase } from "@/lib/supabase";
-import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/useToast";
-import { Button, Input, Card, Badge, Modal, Select, Table, Pagination } from "@/components/ui";
-import { Building2, Search, Plus, RefreshCw, Phone, Mail, Link2, ToggleRight, ToggleLeft, Edit2, Trash2 } from "lucide-react";
-import { formatDate, maskCPF, maskCNPJ, validateCNPJ, onlyDigits, cleanPayload, missingFields, orSafe } from "@/lib/utils";
+import { Button, Input, Badge, Modal, Table, Pagination } from "@/components/ui";
+import { Search, Plus, Edit2, Trash2 } from "lucide-react";
+import { maskCNPJ, onlyDigits, cleanPayload, missingFields, orSafe } from "@/lib/utils";
 
 export const InsurersList = () => {
-  const { role } = useAuth();
   const { success, error } = useToast();
-  const navigate = useNavigate();
   const [insurers, setInsurers] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);

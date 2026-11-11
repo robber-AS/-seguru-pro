@@ -1,10 +1,9 @@
-import React from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useTheme } from "@/contexts/ThemeContext";
 import { Sun, Moon, Bell, Search } from "lucide-react";
 
 export const Navbar = () => {
-  const { user, signOut, profile } = useAuth();
+  const { user, profile } = useAuth();
   const { theme, toggleTheme } = useTheme();
 
   return (

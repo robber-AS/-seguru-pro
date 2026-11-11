@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/useToast";
-import { Button, Input, Card, Badge, Modal, Select, Table, Pagination } from "@/components/ui";
-import { FilePlus, Search, Plus, RefreshCw, FileText, CreditCard, ShieldAlert, Calendar, Clock, Edit2, Trash2 } from "lucide-react";
-import { formatDate, formatCurrency, onlyDigits, cleanPayload, missingFields, textMatch , toDecimal, toInputDecimal } from "@/lib/utils";
+import { Button, Input, Badge, Modal, Select, Table, Pagination } from "@/components/ui";
+import { Search, Plus, Edit2, Trash2 } from "lucide-react";
+import { formatDate, formatCurrency, cleanPayload, missingFields, textMatch, toDecimal, toInputDecimal } from "@/lib/utils";
 
 const POLICY_STATUSES = ["Ativa", "Cancelada", "Vencida", "Em renovação"];
 const PAYMENT_METHODS = ["À vista", "Cartão de crédito", "Boleto", "Pix", "Financiamento"];
@@ -13,13 +12,12 @@ const PAYMENT_METHODS = ["À vista", "Cartão de crédito", "Boleto", "Pix", "Fi
 export const PoliciesList = () => {
   const { profile, role } = useAuth();
   const { success, error } = useToast();
-  const navigate = useNavigate();
   const [policies, setPolicies] = useState<any[]>([]);
   const [clients, setClients] = useState<any[]>([]);
   const [vehicles, setVehicles] = useState<any[]>([]);
   const [insurers, setInsurers] = useState<any[]>([]);
   const [corretores, setCorretores] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
@@ -35,7 +33,7 @@ export const PoliciesList = () => {
     let vq = supabase.from("vehicles").select("id, plate, brand, model, client_id");
     let iq = supabase.from("insurers").select("id, name").eq("is_active", true);
     if (role === "corretor") {
-      cq = cq.eq("corretor_id", profile?.id);
+      cq = cq.eq("corretor_id", profile?.id ?? "");
     }
     // admin vê todos os perfis; corretor só enxerga o próprio (RLS)
     const pq = supabase.from("profiles").select("id, full_name, email").order("full_name");
@@ -49,7 +47,7 @@ export const PoliciesList = () => {
   const loadPolicies = async () => {
     setLoading(true);
     let q = supabase.from("policies").select("*, clients(full_name), vehicles(plate, brand, model), insurers(name), profiles(full_name)", { count: "exact" });
-    if (role === "corretor") q = q.eq("corretor_id", profile?.id);
+    if (role === "corretor") q = q.eq("corretor_id", profile?.id ?? "");
     q = q.order("created_at", { ascending: false });
     const from = (page - 1) * PAGE_SIZE;
     if (!search) q = q.range(from, from + PAGE_SIZE - 1);

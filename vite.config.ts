@@ -6,6 +6,8 @@ import { fileURLToPath, URL } from 'node:url'
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => ({
   plugins: [react(), tailwindcss()],
+  // aceita também as variáveis NEXT_PUBLIC_* criadas pela integração Supabase do Vercel
+  envPrefix: ['VITE_', 'NEXT_PUBLIC_'],
   // no instalador (vite build --mode electron) os arquivos são lidos do disco,
   // então os caminhos precisam ser relativos
   base: mode === 'electron' ? './' : '/',

@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/useToast";
-import { Button, Input, Card, Badge, Select, Table } from "@/components/ui";
-import { FileText, Search, RefreshCw, Filter, Calendar, FileText as FileCsv, FileSpreadsheet, BarChart3 } from "lucide-react";
+import { Button, Input, Badge, Select, Table } from "@/components/ui";
+import { FileText, RefreshCw, FileText as FileCsv, FileSpreadsheet } from "lucide-react";
 import { formatCurrency, formatDate } from "@/lib/utils";
 
 export const ReportsPage = () => {
   const { profile, role } = useAuth();
   const { success, error } = useToast();
   const [data, setData] = useState<any[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [, setLoading] = useState(false);
   const [filters, setFilters] = useState({
     start_date: "",
     end_date: "",
@@ -35,8 +35,8 @@ export const ReportsPage = () => {
     let iq = supabase.from("insurers").select("id, name");
     let uq = supabase.from("profiles").select("id, full_name").eq("role", "corretor");
     if (role === "corretor") {
-      cq = cq.eq("corretor_id", profile?.id);
-      uq = uq.eq("id", profile?.id);
+      cq = cq.eq("corretor_id", profile?.id ?? "");
+      uq = uq.eq("id", profile?.id ?? "");
     }
     const [cr, ir, ur] = await Promise.all([cq, iq, uq]);
     setClients(cr.data || []);
@@ -48,7 +48,7 @@ export const ReportsPage = () => {
     setLoading(true);
     try {
       let q = supabase.from("policies").select("*, clients(full_name, cpf_cnpj), vehicles(type, brand, model, plate), insurers(name), profiles(full_name)");
-      if (role === "corretor") q = q.eq("corretor_id", profile?.id);
+      if (role === "corretor") q = q.eq("corretor_id", profile?.id ?? "");
       if (filters.start_date) q = q.gte("start_date", filters.start_date);
       if (filters.end_date) q = q.lte("start_date", filters.end_date);
       if (filters.client_id) q = q.eq("client_id", filters.client_id);

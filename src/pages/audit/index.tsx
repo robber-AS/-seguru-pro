@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/useToast";
-import { Button, Input, Card, Badge, Table, Modal, Select } from "@/components/ui";
-import { ShieldAlert, Search, RefreshCw, User, Edit2, Trash2, Clock, Mail, Plus } from "lucide-react";
+import { Button, Input, Badge, Table, Modal } from "@/components/ui";
+import { ShieldAlert, Search, RefreshCw, User, Plus } from "lucide-react";
 import { formatDate, textMatch, validateEmail } from "@/lib/utils";
 
 export const AuditPage = () => {
   const { role } = useAuth();
   const { error } = useToast();
   const [logs, setLogs] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [, setLoading] = useState(true);
   const [search, setSearch] = useState("");
 
   useEffect(() => {
@@ -333,11 +333,5 @@ export const UsersPage = () => {
   );
 };
 
-function ShieldAlertFallback() { return <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>; }
+function ShieldAlertFallback({ className = "h-5 w-5" }: { className?: string }) { return <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>; }
 
-function statusVariant2(s: string) {
-  if (s === "Ativa") return "success";
-  if (s === "Vencida") return "danger";
-  if (s === "Em renovação") return "warning";
-  return "secondary";
-}

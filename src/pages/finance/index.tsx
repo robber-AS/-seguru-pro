@@ -3,7 +3,7 @@ import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/useToast";
 import { Button, Input, Card, Badge, Modal, Select, Table } from "@/components/ui";
-import { CreditCard, Search, Plus, RefreshCw, TrendingUp, BarChart3, PieChart, Calendar, Edit2, Trash2 } from "lucide-react";
+import { CreditCard, Search, Plus, RefreshCw, TrendingUp, BarChart3, PieChart, Edit2, Trash2 } from "lucide-react";
 import { formatCurrency, formatDate, cleanPayload, missingFields , toDecimal, toInputDecimal , parseDate } from "@/lib/utils";
 
 export const FinancePage = () => {
@@ -11,7 +11,7 @@ export const FinancePage = () => {
   const { success, error } = useToast();
   const [commissions, setCommissions] = useState<any[]>([]);
   const [policies, setPolicies] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [, setLoading] = useState(true);
   const [formOpen, setFormOpen] = useState(false);
   const [editing, setEditing] = useState(false);
   const [selected, setSelected] = useState<any>(null);
@@ -30,8 +30,8 @@ export const FinancePage = () => {
       // commissions não tem corretor próprio: o corretor vem da apólice (commissions -> policies -> profiles)
       let cq = supabase.from("commissions").select("*, policies!inner(policy_number, premium_value, corretor_id, profiles(full_name))");
       if (role === "corretor") {
-        pq = pq.eq("corretor_id", profile?.id);
-        cq = cq.eq("policies.corretor_id", profile?.id);
+        pq = pq.eq("corretor_id", profile?.id ?? "");
+        cq = cq.eq("policies.corretor_id", profile?.id ?? "");
       }
       const [pr, cr] = await Promise.all([pq, cq]);
       if (pr.error) throw pr.error;
@@ -249,8 +249,8 @@ function StatCard({ title, value, icon, color }: { title: string; value: React.R
   );
 }
 
-function CheckCircle2Fallback() { return <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>; }
-function ClockFallback() { return <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>; }
+function CheckCircle2Fallback({ className = "h-5 w-5" }: { className?: string }) { return <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>; }
+function ClockFallback({ className = "h-5 w-5" }: { className?: string }) { return <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>; }
 
 function CommissionForm({ policies, onSave, initialData }: { policies: any[]; onSave: (values: any) => void; initialData?: any }) {
   const [form, setForm] = useState({

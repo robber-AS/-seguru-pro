@@ -4,8 +4,8 @@ import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/useToast";
 import { Button } from "@/components/ui";
-import { Users, CreditCard, ShieldAlert, Clock, FileText, DollarSign, TrendingUp, RefreshCw, AlertTriangle, CheckCircle2, Car, Bike as Motorcycle, BarChart3 } from "lucide-react";
-import { formatCurrency, formatDate , parseDate } from "@/lib/utils";
+import { Users, CreditCard, ShieldAlert, Clock, FileText, DollarSign, TrendingUp, RefreshCw, AlertTriangle, CheckCircle2, BarChart3 } from "lucide-react";
+import { formatCurrency, parseDate } from "@/lib/utils";
 
 interface StatCard {
   title: string;
@@ -15,9 +15,6 @@ interface StatCard {
   color: string;
 }
 
-const CARD_ICONS: Record<string, React.ComponentType<React.SVGProps<SVGSVGElement>>> = {
-  Users, CreditCard, ShieldAlert, Clock, FileText, DollarSign, TrendingUp, RefreshCw, AlertTriangle, CheckCircle2,
-};
 
 export const Dashboard = () => {
   const { profile, role } = useAuth();
@@ -49,10 +46,12 @@ export const Dashboard = () => {
       const [cRes, vRes, pRes, qRes] = await Promise.all([
         supabase.from("clients").select("id", { count: "exact", head: true }),
         supabase.from("vehicles").select("id, type", { count: "exact", head: true }),
-        supabase
-          .from("policies")
-          .select("id, status, premium_value, end_date, commission_value, contract_date, corretor_id")
-          .eq("corretor_id", isAdmin ? undefined : corretorId),
+        (() => {
+          const q = supabase
+            .from("policies")
+            .select("id, status, premium_value, end_date, commission_value, contract_date, corretor_id");
+          return isAdmin ? q : q.eq("corretor_id", corretorId ?? "");
+        })(),
         supabase.from("quotes").select("id, status, client_id"),
       ]);
 
@@ -232,7 +231,7 @@ function StatCard({ card }: { card: StatCard }) {
   );
 }
 
-function ChartCard({ title, children, type }: { title: string; children: React.ReactNode; type: string }) {
+function ChartCard({ title, children }: { title: string; children: React.ReactNode; type: string }) {
   return (
     <div className="rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden flex flex-col">
       <div className="border-b border-gray-200 bg-gray-50 px-5 py-4">

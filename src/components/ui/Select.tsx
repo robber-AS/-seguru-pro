@@ -1,5 +1,4 @@
 import React from "react";
-import { ChevronDown, ChevronUp } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface SelectOption {
