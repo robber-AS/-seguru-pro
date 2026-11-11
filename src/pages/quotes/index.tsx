@@ -3,9 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/useToast";
-import { Button, Input, Card, Badge, Modal, Select, Table, Pagination } from "@/components/ui";
-import { FileText, Search, Plus, RefreshCw, Truck, ShieldCheck, Car, User, CreditCard, Edit2, Trash2 } from "lucide-react";
-import { formatDate, formatCurrency, onlyDigits, cleanPayload, missingFields, textMatch , toDecimal, toInputDecimal } from "@/lib/utils";
+import { Button, Input, Badge, Modal, Select, Table, Pagination } from "@/components/ui";
+import { Search, Plus, Edit2, Trash2 } from "lucide-react";
+import { formatDate, formatCurrency, cleanPayload, missingFields, textMatch, toDecimal, toInputDecimal } from "@/lib/utils";
 
 const QUOTE_STATUSES = ["Nova cotação", "Em análise", "Aguardando cliente", "Aprovada", "Recusada", "Convertida em apólice"];
 const PAYMENT_METHODS = ["À vista", "Cartão de crédito", "Boleto", "Pix", "Financiamento"];
@@ -18,7 +18,7 @@ export const QuotesList = () => {
   const [clients, setClients] = useState<any[]>([]);
   const [vehicles, setVehicles] = useState<any[]>([]);
   const [insurers, setInsurers] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
@@ -34,7 +34,7 @@ export const QuotesList = () => {
     let vq = supabase.from("vehicles").select("id, plate, brand, model, client_id");
     let iq = supabase.from("insurers").select("id, name").eq("is_active", true);
     if (role === "corretor") {
-      cq = cq.eq("corretor_id", profile?.id);
+      cq = cq.eq("corretor_id", profile?.id ?? "");
     }
     const [cr, vr, ir] = await Promise.all([cq, vq, iq]);
     setClients(cr.data || []);
@@ -95,7 +95,7 @@ export const QuotesList = () => {
       error("Erro ao excluir cotação", err.message || "Não é possível excluir esta cotação.");
     }
   };
-  const handleConvert = (q: any) => {
+  const handleConvert = (_q: any) => {
     navigate("/policies");
   };
 
@@ -173,7 +173,6 @@ function statusVariant(s: string) {
 }
 
 function QuoteForm({ clients, vehicles, insurers, onSave, initialData }: { clients: any[]; vehicles: any[]; insurers: any[]; onSave: (values: any) => void; initialData?: any }) {
-  const clientVehicles = initialData ? vehicles.filter((v: any) => v.client_id === initialData.client_id) : [];
   const [form, setForm] = useState({
     client_id: initialData?.client_id || "",
     vehicle_id: initialData?.vehicle_id || "",

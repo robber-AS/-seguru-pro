@@ -1,5 +1,4 @@
 import { supabase } from "@/lib/supabase";
-import { Database } from "@/types/database";
 import type { Profile, UserRole } from "@/types";
 
 export function useAuth() {

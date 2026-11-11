@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/useToast";
-import { Button, Input } from "@/components/ui";
+import { Input } from "@/components/ui";
 import { Mail, ArrowLeft } from "lucide-react";
 import { validateEmail } from "@/lib/utils";
 

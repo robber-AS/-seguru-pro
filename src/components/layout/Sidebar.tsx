@@ -2,32 +2,7 @@ import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useTheme } from "@/contexts/ThemeContext";
-import {
-  LayoutDashboard,
-  Users,
-  CreditCard,
-  FileText,
-  Clock,
-  ShieldAlert,
-  BarChart3,
-  Settings,
-  LogOut,
-  ChevronLeft,
-  Search,
-  Menu,
-  Car,
-  Bike as Motorcycle,
-  Building2,
-  FilePlus,
-  RefreshCw,
-  Smartphone,
-  Phone,
-  Mail,
-  Home,
-  FolderKanban,
-  PieChart,
-  TrendingUp,
-} from "lucide-react";
+import { LayoutDashboard, Users, CreditCard, FileText, ShieldAlert, BarChart3, Settings, LogOut, ChevronLeft, Menu, Car, Building2, FilePlus, RefreshCw, FolderKanban } from "lucide-react";
 
 interface NavItem {
   label: string;
@@ -52,7 +27,7 @@ const navItems: NavItem[] = [
 ];
 
 export const Sidebar = () => {
-  const { user, signOut, profile, role } = useAuth();
+  const { user, signOut, role } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const { theme } = useTheme();
@@ -142,6 +117,3 @@ export const Sidebar = () => {
   );
 };
 
-function cnClass(...classes: (string | undefined | null | boolean)[]) {
-  return classes.filter(Boolean).join(" ");
-}

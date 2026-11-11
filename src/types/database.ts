@@ -34,6 +34,7 @@ export type Database = {
           created_at?: string;
           updated_at?: string;
         };
+        Relationships: [];
       };
       clients: {
         Row: {
@@ -96,6 +97,7 @@ export type Database = {
           created_at?: string;
           updated_at?: string;
         };
+        Relationships: [];
       };
       vehicles: {
         Row: {
@@ -167,6 +169,7 @@ export type Database = {
           created_at?: string;
           updated_at?: string;
         };
+        Relationships: [];
       };
       insurers: {
         Row: {
@@ -208,6 +211,7 @@ export type Database = {
           created_at?: string;
           updated_at?: string;
         };
+        Relationships: [];
       };
       quotes: {
         Row: {
@@ -270,6 +274,7 @@ export type Database = {
           created_at?: string;
           updated_at?: string;
         };
+        Relationships: [];
       };
       quote_coverages: {
         Row: {
@@ -293,6 +298,7 @@ export type Database = {
           included?: boolean;
           value?: string | null;
         };
+        Relationships: [];
       };
       policies: {
         Row: {
@@ -361,6 +367,7 @@ export type Database = {
           created_at?: string;
           updated_at?: string;
         };
+        Relationships: [];
       };
       renewals: {
         Row: {
@@ -414,6 +421,7 @@ export type Database = {
           created_at?: string;
           updated_at?: string;
         };
+        Relationships: [];
       };
       renewal_contacts: {
         Row: {
@@ -440,6 +448,7 @@ export type Database = {
           observations?: string | null;
           created_at?: string;
         };
+        Relationships: [];
       };
       commissions: {
         Row: {
@@ -475,6 +484,7 @@ export type Database = {
           created_at?: string;
           updated_at?: string;
         };
+        Relationships: [];
       };
       payments: {
         Row: {
@@ -504,6 +514,7 @@ export type Database = {
           created_at?: string;
           updated_at?: string;
         };
+        Relationships: [];
       };
       documents: {
         Row: {
@@ -533,6 +544,7 @@ export type Database = {
           uploaded_by?: string | null;
           created_at?: string;
         };
+        Relationships: [];
       };
       audit_logs: {
         Row: {
@@ -565,6 +577,7 @@ export type Database = {
           new_values?: string | null;
           created_at?: string;
         };
+        Relationships: [];
       };
       company_settings: {
         Row: {
@@ -603,6 +616,7 @@ export type Database = {
           created_at?: string;
           updated_at?: string;
         };
+        Relationships: [];
       };
     };
     Views: {

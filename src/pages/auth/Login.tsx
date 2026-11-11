@@ -2,15 +2,7 @@ import React from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/useToast";
-import {
-  Mail,
-  Lock,
-  Eye,
-  EyeOff,
-  Loader2,
-  ArrowLeft,
-  Mail as MailIcon,
-} from "lucide-react";
+import { Mail, Eye, EyeOff, Loader2, ArrowLeft, Mail as MailIcon } from "lucide-react";
 
 export const Login = () => {
   const navigate = useNavigate();
@@ -53,7 +45,7 @@ export const Login = () => {
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
               <label className="label-field">E-mail</label>
-              <InputWithIcon icon={<Mail className="h-5 w-5" />} type="email" placeholder="seu@email.com" value={email} onChange={(e) => setEmail(e.target.value)} required />
+              <InputWithIcon icon={<Mail className="h-5 w-5" />} type="email" placeholder="seu@email.com" value={email} onChange={(e: { target: { value: string } }) => setEmail(e.target.value)} required />
             </div>
 
             <div className="relative">
@@ -158,7 +150,7 @@ export const ForgotPassword = () => {
                     className="input-field w-full pl-10"
                     placeholder="seu@email.com"
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={(e: { target: { value: string } }) => setEmail(e.target.value)}
                     required
                   />
                 </div>

@@ -4,7 +4,7 @@ import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/useToast";
 import { Button, Input, Card, CardHeader, CardBody, Badge, Modal, Table, Pagination } from "@/components/ui";
-import { Users, Search, Plus, Edit2, Trash2, ChevronRight, Car as Vehicle, FileText, RefreshCw } from "lucide-react";
+import { Search, Plus, Edit2, Trash2, ChevronRight, Car as Vehicle, FileText, RefreshCw } from "lucide-react";
 import { formatCPF, formatCNPJ, formatDate, formatPhone, validateCPF, validateCNPJ, validateEmail, maskCPF, maskPhone, onlyDigits, cleanPayload, orSafe } from "@/lib/utils";
 
 export const ClientsList = () => {
@@ -12,7 +12,7 @@ export const ClientsList = () => {
   const { success, error } = useToast();
   const navigate = useNavigate();
   const [clients, setClients] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
@@ -28,7 +28,7 @@ export const ClientsList = () => {
     let query = supabase.from("clients").select("*, vehicles(count)", { count: "exact" });
 
     if (!role || role === "corretor") {
-      query = query.eq("corretor_id", profile?.id);
+      query = query.eq("corretor_id", profile?.id ?? "");
     }
 
     if (search) {
@@ -272,7 +272,7 @@ function ClientForm({ onSave, initialData }: { onSave: (values: any) => void; in
 
         <div>
           <label className="label-field">CEP</label>
-          <Input value={form.cep} onChange={(e) => setForm({ ...form, cep: e.target.value.replace(/\D/g, "") })} placeholder="00000-000" maxLength="8" />
+          <Input value={form.cep} onChange={(e) => setForm({ ...form, cep: e.target.value.replace(/\D/g, "") })} placeholder="00000-000" maxLength={8} />
         </div>
 
         <div className="col-span-full">
@@ -302,7 +302,7 @@ function ClientForm({ onSave, initialData }: { onSave: (values: any) => void; in
 
         <div>
           <label className="label-field">Estado</label>
-          <Input value={form.state} onChange={(e) => setForm({ ...form, state: e.target.value.toUpperCase() })} maxLength="2" />
+          <Input value={form.state} onChange={(e) => setForm({ ...form, state: e.target.value.toUpperCase() })} maxLength={2} />
         </div>
 
         <div className="col-span-full">
@@ -327,7 +327,7 @@ function ClientForm({ onSave, initialData }: { onSave: (values: any) => void; in
 export const ClientDetail = () => {
   const { id } = useParams();
   const { profile, role } = useAuth();
-  const { error, success } = useToast();
+  const { error } = useToast();
   const [client, setClient] = useState<any>(null);
   const [vehicles, setVehicles] = useState<any[]>([]);
   const [policies, setPolicies] = useState<any[]>([]);
@@ -340,16 +340,16 @@ export const ClientDetail = () => {
 
   const loadData = async () => {
     try {
-      let q = supabase.from("clients").select("*").eq("id", id);
-      if (role === "corretor") q = q.eq("corretor_id", profile?.id);
+      let q = supabase.from("clients").select("*").eq("id", id ?? "");
+      if (role === "corretor") q = q.eq("corretor_id", profile?.id ?? "");
       const { data, error: err } = await q.single();
       if (err) throw err;
       setClient(data);
 
-      const { data: v, error: verr } = await supabase.from("vehicles").select("*").eq("client_id", id);
+      const { data: v, error: verr } = await supabase.from("vehicles").select("*").eq("client_id", id ?? "");
       if (!verr) setVehicles(v || []);
 
-      const { data: p, error: perr } = await supabase.from("policies").select("*").eq("client_id", id);
+      const { data: p, error: perr } = await supabase.from("policies").select("*").eq("client_id", id ?? "");
       if (!perr) setPolicies(p || []);
     } catch (err: any) {
       error("Erro ao carregar cliente", err.message);

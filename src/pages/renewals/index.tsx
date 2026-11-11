@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/useToast";
-import { Button, Input, Card, Badge, Modal, Select, Table } from "@/components/ui";
-import { RefreshCw, Search, Phone, Clock, CheckCircle2, AlertTriangle, ChevronRight, FileText, Plus, Users } from "lucide-react";
+import { Button, Input, Badge, Modal, Select, Table } from "@/components/ui";
+import { RefreshCw, Search, Phone, FileText, Users } from "lucide-react";
 import { formatDate, formatCurrency, textMatch , parseDate } from "@/lib/utils";
 
 const RENEWAL_FILTERS = [
@@ -24,8 +24,8 @@ export const RenewalsList = () => {
   const navigate = useNavigate();
   const [policies, setPolicies] = useState<any[]>([]);
   const [renewals, setRenewals] = useState<any[]>([]);
-  const [contacts, setContacts] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [, setContacts] = useState<any[]>([]);
+  const [, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("all");
   const [modalOpen, setModalOpen] = useState(false);
@@ -42,7 +42,7 @@ export const RenewalsList = () => {
       let q = supabase
         .from("policies")
         .select("*, clients(full_name, phone, whatsapp), vehicles(plate, brand, model), insurers(name), profiles(full_name)");
-      if (role === "corretor") q = q.eq("corretor_id", profile?.id);
+      if (role === "corretor") q = q.eq("corretor_id", profile?.id ?? "");
       const { data, error: err } = await q.order("end_date", { ascending: true });
       if (err) throw err;
       setPolicies((data || []).filter((p: any) => textMatch(search, p.clients?.full_name, p.vehicles?.plate, p.policy_number, p.insurers?.name)));
@@ -124,7 +124,7 @@ export const RenewalsList = () => {
     }
   };
 
-  const handleCreateQuote = (p: any) => {
+  const handleCreateQuote = (_p: any) => {
     navigate("/quotes");
   };
 
