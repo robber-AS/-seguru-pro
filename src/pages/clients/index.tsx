@@ -73,8 +73,24 @@ export const ClientsList = () => {
 
   const handleSave = async (raw: any) => {
     const values = cleanPayload(raw);
+    const digits = onlyDigits(values.cpf_cnpj || "");
+    if (digits.length === 11 && !validateCPF(values.cpf_cnpj)) {
+      return error("CPF inválido");
+    }
+    if (digits.length === 14 && !validateCNPJ(values.cpf_cnpj)) {
+      return error("CNPJ inválido");
+    }
     try {
+      const { data: existing } = await supabase
+        .from("clients")
+        .select("id, full_name")
+        .eq("cpf_cnpj", values.cpf_cnpj);
+
       if (editing && selectedClient) {
+        const isDuplicate = (existing ?? []).some((c: any) => c.id !== selectedClient.id);
+        if (isDuplicate) {
+          return error("CPF/CNPJ já cadastrado", "Já existe um cliente com este CPF/CNPJ.");
+        }
         const { error: err } = await supabase
           .from("clients")
           .update(values)
@@ -82,6 +98,9 @@ export const ClientsList = () => {
         if (err) throw err;
         success("Cliente atualizado com sucesso");
       } else {
+        if ((existing ?? []).length > 0) {
+          return error("CPF/CNPJ já cadastrado", "Já existe um cliente com este CPF/CNPJ.");
+        }
         const { error: err } = await supabase.from("clients").insert({ ...values, corretor_id: profile?.id });
         if (err) throw err;
         success("Cliente cadastrado com sucesso");
@@ -242,7 +261,7 @@ function ClientForm({ onSave, initialData }: { onSave: (values: any) => void; in
           <label className="label-field">CPF / CNPJ</label>
           <Input
             value={form.cpf_cnpj}
-            onChange={(e) => setForm({ ...form, cpf_cnpj: isCNPJ ? maskCPF(e.target.value) : maskCPF(e.target.value) })}
+            onChange={(e) => setForm({ ...form, cpf_cnpj: isCNPJ ? maskCNPJ(e.target.value) : maskCPF(e.target.value) })}
             placeholder={isCNPJ ? "00.000.000/0000-00" : "000.000.000-00"}
             error={errors.cpf_cnpj}
           />
