@@ -26,3 +26,5 @@ build
 *.sw?
 
 release/
+
+.claude/settings.local.json
