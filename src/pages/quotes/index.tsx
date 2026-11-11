@@ -133,11 +133,12 @@ export const QuotesList = () => {
               <Badge key="5" variant={statusVariant(q.status)}>{q.status}</Badge>,
               <span key="6" className="text-sm text-gray-500">{formatDate(q.quote_date)}</span>,
               <div key="7" className="flex items-center gap-2">
-                <Button variant="secondary" size="sm" onClick={() => handleEdit(q)} icon={<Edit2 className="h-4 w-4" />}>Editar</Button>
-                {q.status !== "Convertida em apólice" && <Button variant="secondary" size="sm" onClick={() => handleConvert(q)}>Converter</Button>}
-                <Button variant="secondary" size="sm" icon={<Trash2 className="h-4 w-4" />} onClick={() => handleDelete(q)} />
+                <Button variant="primary" size="sm" onClick={(e) => { e.stopPropagation(); handleEdit(q); }} icon={<Edit2 className="h-4 w-4" />}>Editar</Button>
+                {q.status !== "Convertida em apólice" && <Button variant="secondary" size="sm" onClick={(e) => { e.stopPropagation(); handleConvert(q); }}>Converter</Button>}
+                <Button variant="secondary" size="sm" icon={<Trash2 className="h-4 w-4" />} onClick={(e) => { e.stopPropagation(); handleDelete(q); }} />
               </div>,
             ])}
+            rowOnClick={(i) => handleEdit(quotes[i])}
           />
         </div>
         <div className="border-t border-gray-200 bg-gray-50 px-5 py-3 flex flex-wrap items-center justify-between gap-3">

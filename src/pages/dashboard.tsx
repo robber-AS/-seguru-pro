@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/useToast";
@@ -21,6 +22,7 @@ const CARD_ICONS: Record<string, React.ComponentType<React.SVGProps<SVGSVGElemen
 export const Dashboard = () => {
   const { profile, role } = useAuth();
   const { error } = useToast();
+  const navigate = useNavigate();
   const [stats, setStats] = useState<any>({
     total_clients: 0,
     total_vehicles: 0,
@@ -47,8 +49,11 @@ export const Dashboard = () => {
       const [cRes, vRes, pRes, qRes] = await Promise.all([
         supabase.from("clients").select("id", { count: "exact", head: true }),
         supabase.from("vehicles").select("id, type", { count: "exact", head: true }),
-        supabase.from("policies").select("id, status, premium_value, end_date, commission_value, contract_date, corretor_id"),
-        supabase.from("quotes").select("id, status"),
+        supabase
+          .from("policies")
+          .select("id, status, premium_value, end_date, commission_value, contract_date, corretor_id")
+          .eq("corretor_id", isAdmin ? undefined : corretorId),
+        supabase.from("quotes").select("id, status, client_id"),
       ]);
 
       let clientsCount = cRes.count ?? 0;
@@ -57,7 +62,9 @@ export const Dashboard = () => {
       let quotes = qRes.data ?? [];
 
       if (!isAdmin && corretorId) {
-        policies = policies.filter((p: any) => p.corretor_id === corretorId);
+        const { data: myClients } = await supabase.from("clients").select("id").eq("corretor_id", corretorId);
+        const myClientIds = new Set((myClients ?? []).map((c: any) => c.id));
+        quotes = quotes.filter((q: any) => myClientIds.has(q.client_id));
       }
 
       const today = new Date();
@@ -194,10 +201,10 @@ export const Dashboard = () => {
         </Card>
         <Card title="Ações Rápidas">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <QuickAction icon={<Users className="h-4 w-4" />} label="Novo Cliente" color="bg-blue-500" />
-            <QuickAction icon={<FileText className="h-4 w-4" />} label="Nova Cotação" color="bg-purple-500" />
-            <QuickAction icon={<CreditCard className="h-4 w-4" />} label="Nova Apólice" color="bg-indigo-500" />
-            <QuickAction icon={<Clock className="h-4 w-4" />} label="Renovações" color="bg-amber-500" />
+            <QuickAction icon={<Users className="h-4 w-4" />} label="Novo Cliente" color="bg-blue-500" onClick={() => navigate("/clients/new")} />
+            <QuickAction icon={<FileText className="h-4 w-4" />} label="Nova Cotação" color="bg-purple-500" onClick={() => navigate("/quotes")} />
+            <QuickAction icon={<CreditCard className="h-4 w-4" />} label="Nova Apólice" color="bg-indigo-500" onClick={() => navigate("/policies")} />
+            <QuickAction icon={<Clock className="h-4 w-4" />} label="Renovações" color="bg-amber-500" onClick={() => navigate("/renewals")} />
           </div>
         </Card>
       </div>
@@ -259,9 +266,12 @@ function Card({ title, children }: { title: string; children: React.ReactNode })
   );
 }
 
-function QuickAction({ icon, label, color }: { icon: React.ReactNode; label: string; color: string }) {
+function QuickAction({ icon, label, color, onClick }: { icon: React.ReactNode; label: string; color: string; onClick?: () => void }) {
   return (
-    <a className="flex items-center gap-2 px-4 py-3 min-w-0 cursor-pointer rounded-lg border border-gray-200 bg-white hover:bg-blue-50 text-sm text-gray-700 transition-colors">
+    <a
+      className="flex items-center gap-2 px-4 py-3 min-w-0 cursor-pointer rounded-lg border border-gray-200 bg-white hover:bg-blue-50 text-sm text-gray-700 transition-colors"
+      onClick={onClick}
+    >
       <div className={`w-8 h-8 shrink-0 rounded-lg flex items-center justify-center text-white ${color}`}>{icon}</div>
       <span>{label}</span>
     </a>

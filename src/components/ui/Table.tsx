@@ -6,9 +6,10 @@ interface TableProps {
   columns: string[];
   data: any[][];
   className?: string;
+  rowOnClick?: (rowIndex: number) => void;
 }
 
-export const Table = ({ columns, data, className }: TableProps) => (
+export const Table = ({ columns, data, className, rowOnClick }: TableProps) => (
   <div className="overflow-x-auto">
     <table className={cn("w-full text-sm text-left border-collapse", className)}>
       <thead>
@@ -22,7 +23,11 @@ export const Table = ({ columns, data, className }: TableProps) => (
       </thead>
       <tbody>
         {data.map((row, i) => (
-          <tr key={i} className="border-b border-gray-100 last:border-0 hover:bg-gray-50/50">
+          <tr
+            key={i}
+            className="border-b border-gray-100 last:border-0 hover:bg-gray-50/50 cursor-pointer transition-colors"
+            onClick={rowOnClick ? () => rowOnClick(i) : undefined}
+          >
             {row.map((cell, j) => (
               <td key={j} className="px-4 py-3 border-b border-gray-100 text-gray-900 whitespace-nowrap">
                 {cell}

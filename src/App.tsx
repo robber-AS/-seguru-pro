@@ -1,6 +1,7 @@
 import React from "react";
 import { BrowserRouter, HashRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
+import { ThemeProvider } from "@/contexts/ThemeContext";
 import { Login, ForgotPassword, ResetPassword, RegisterPage } from "@/pages/auth";
 import { Dashboard } from "@/pages/dashboard";
 import { ClientsList, ClientDetail } from "@/pages/clients";
@@ -12,6 +13,7 @@ import { RenewalsList } from "@/pages/renewals";
 import { FinancePage } from "@/pages/finance";
 import { ReportsPage } from "@/pages/reports";
 import { AuditPage, UsersPage } from "@/pages/audit";
+import { SettingsPage } from "@/pages/settings";
 import { ProtectedRoute } from "@/components/layout/ProtectedRoute";
 import { Toast } from "@/components/ui/sonner";
 
@@ -21,7 +23,8 @@ const Router = window.location.protocol === "file:" ? HashRouter : BrowserRouter
 
 function App() {
   return (
-    <AuthProvider>
+    <ThemeProvider>
+      <AuthProvider>
         <Toast />
         <Router>
           <Routes>
@@ -43,11 +46,13 @@ function App() {
               <Route path="/finance" element={<FinancePage />} />
               <Route path="/reports" element={<ReportsPage />} />
               <Route path="/audit" element={<AuditPage />} />
+              <Route path="/settings" element={<SettingsPage />} />
               <Route path="/users" element={<UsersPage />} />
             </Route>
           </Routes>
         </Router>
-    </AuthProvider>
+      </AuthProvider>
+    </ThemeProvider>
   );
 }
 

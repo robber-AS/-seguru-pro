@@ -566,6 +566,44 @@ export type Database = {
           created_at?: string;
         };
       };
+      company_settings: {
+        Row: {
+          id: string;
+          company_name: string | null;
+          cnpj: string | null;
+          phone: string | null;
+          email: string | null;
+          address: string | null;
+          city: string | null;
+          state: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          company_name?: string | null;
+          cnpj?: string | null;
+          phone?: string | null;
+          email?: string | null;
+          address?: string | null;
+          city?: string | null;
+          state?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          company_name?: string | null;
+          cnpj?: string | null;
+          phone?: string | null;
+          email?: string | null;
+          address?: string | null;
+          city?: string | null;
+          state?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+      };
     };
     Views: {
       [_ in never]: never;

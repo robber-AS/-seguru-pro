@@ -64,6 +64,9 @@ body {
 
 .dark body {
   @apply bg-[var(--color-bg-body-dark)] text-[var(--color-text-main-dark)];
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-weight: 500;
+  letter-spacing: 0.01em;
 }
 
 /* Em @layer components para que utilitários (pl-10, w-full etc.) consigam sobrescrever */

@@ -8,7 +8,7 @@ interface LayoutProps {
 
 export const Layout = ({ children }: LayoutProps) => {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[var(--color-bg-body)] dark:bg-[var(--color-bg-body-dark)]">
       <Sidebar />
       <div className="lg:pl-64 min-w-0">
         <Navbar />

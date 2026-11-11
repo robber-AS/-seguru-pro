@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import { useTheme } from "@/contexts/ThemeContext";
 import {
   LayoutDashboard,
   Users,
@@ -54,17 +55,9 @@ export const Sidebar = () => {
   const { user, signOut, profile, role } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const { theme } = useTheme();
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [theme, setTheme] = useState<"light" | "dark">("light");
-
-  React.useEffect(() => {
-    const check = () => setTheme(document.documentElement.classList.contains("dark") ? "dark" : "light");
-    check();
-    const observer = new MutationObserver(check);
-    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
-    return () => observer.disconnect();
-  }, []);
 
   const items = role
     ? navItems.filter((i) => !i.roles || i.roles.includes(role))
