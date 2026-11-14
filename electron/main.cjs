@@ -15,7 +15,7 @@ function createWindow() {
     height: 860,
     minWidth: 380,
     minHeight: 600,
-    title: "SegurPro",
+    title: "MDM Corretora de Seguros",
     icon: path.join(__dirname, "..", "build", "icon.png"),
     backgroundColor: "#f9fafb",
     autoHideMenuBar: true,

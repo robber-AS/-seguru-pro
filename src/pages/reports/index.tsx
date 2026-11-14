@@ -115,9 +115,9 @@ export const ReportsPage = () => {
     ]);
     const tableHtml = `
       <html>
-        <head><meta charset="utf-8"><title>Relatório SEGURPRO</title></head>
+        <head><meta charset="utf-8"><title>Relatório MDM Corretora de Seguros</title></head>
         <body>
-          <h2>Relatório de Apólices - SEGURPRO</h2>
+          <h2>Relatório de Apólices - MDM Corretora de Seguros</h2>
           <p>Gerado em: ${new Date().toLocaleString("pt-BR")}</p>
           <table border="1" cellspacing="0" cellpadding="5">
             <thead>
@@ -165,7 +165,7 @@ export const ReportsPage = () => {
       <html>
         <head>
           <meta charset="utf-8">
-          <title>Relatório SEGURPRO</title>
+          <title>Relatório MDM Corretora de Seguros</title>
           <style>
             body { font-family: Arial, sans-serif; font-size: 12px; color: #0f172a; padding: 20px; }
             h2 { text-align: center; margin-bottom: 10px; }
@@ -178,7 +178,7 @@ export const ReportsPage = () => {
           </style>
         </head>
         <body>
-          <h2>Relatório de Apólices - SEGURPRO</h2>
+          <h2>Relatório de Apólices - MDM Corretora de Seguros</h2>
           <p class="subtitle">Gerado em: ${new Date().toLocaleString("pt-BR")} &nbsp;|&nbsp; Total: ${data.length} registro(s)</p>
           <table>
             <thead>

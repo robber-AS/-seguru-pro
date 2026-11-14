@@ -162,7 +162,7 @@ export const UsersPage = () => {
 
   const copyAccess = async () => {
     if (!created) return;
-    const text = `Acesso ao SegurPro\nUsuário: ${created.email}\nSenha: ${created.password}\n(troque a senha no primeiro acesso)`;
+    const text = `Acesso ao sistema MDM Corretora de Seguros\nUsuário: ${created.email}\nSenha: ${created.password}\n(troque a senha no primeiro acesso)`;
     try { await navigator.clipboard.writeText(text); success("Dados de acesso copiados"); }
     catch { error("Não foi possível copiar", "Selecione e copie manualmente."); }
   };

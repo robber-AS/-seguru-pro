@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import logoMdm from "@/assets/logo-mdm.png";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/contexts/AuthContext";
@@ -461,10 +462,8 @@ function AboutSection({ user, profile, role }: { user: any; profile: any; role: 
   return (
     <div className="space-y-6 max-w-xl">
       <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm text-center">
-        <div className="w-12 h-12 rounded-lg bg-blue-600 flex items-center justify-center text-white font-bold text-xl mx-auto mb-3">
-          S
-        </div>
-        <h2 className="text-xl font-bold text-navy">SEGURPRO</h2>
+        <img src={logoMdm} alt="MDM Corretora de Seguros" className="mx-auto h-20 w-auto rounded-lg bg-black mb-3" />
+        <h2 className="text-xl font-bold text-navy">MDM Corretora de Seguros</h2>
         <p className="text-gray-600">Sistema de Gestão de Corretora de Seguros</p>
         <p className="text-xs text-gray-400 mt-2">Versão 1.0.0</p>
       </div>
