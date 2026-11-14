@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useTheme } from "@/contexts/ThemeContext";
+import logoMdm from "@/assets/logo-mdm.png";
 import { LayoutDashboard, Users, CreditCard, FileText, ShieldAlert, BarChart3, Settings, LogOut, ChevronLeft, Menu, Car, Building2, FilePlus, RefreshCw, FolderKanban } from "lucide-react";
 
 interface NavItem {
@@ -57,13 +58,8 @@ export const Sidebar = () => {
         `}
       >
         <div className={`flex items-center justify-between h-16 px-4 border-b ${theme === "dark" ? "border-gray-700" : "border-gray-200"}`}>
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white font-bold text-lg">
-              S
-            </div>
-            <span className={`font-bold text-xl tracking-tight ${theme === "dark" ? "text-white" : "text-navy"} ${collapsed && "hidden"}`}>
-              SEGURPRO
-            </span>
+          <div className={`flex items-center ${collapsed ? "hidden" : ""}`}>
+            <img src={logoMdm} alt="MDM Corretora de Seguros" className="h-12 w-auto rounded-md bg-black" />
           </div>
           {collapsed && (
             <button className={`text-gray-400 hover:text-white ${theme === "dark" ? "hover:text-blue-400" : "hover:text-navy"}`} onClick={() => setCollapsed(false)} aria-label="Expandir">

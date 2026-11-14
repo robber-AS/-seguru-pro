@@ -2,6 +2,8 @@ import React from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/useToast";
+import logoMdm from "@/assets/logo-mdm.png";
+import logoMdmBg from "@/assets/logo-mdm-bg.jpg";
 import { Mail, Eye, EyeOff, Loader2, ArrowLeft, Mail as MailIcon } from "lucide-react";
 
 export const Login = () => {
@@ -31,15 +33,16 @@ export const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+    <div
+      className="min-h-screen flex items-center justify-center bg-black bg-cover bg-center px-4"
+      style={{ backgroundImage: `url(${logoMdmBg})` }}
+    >
       <div className="w-full max-w-md">
         <div className="rounded-xl border border-gray-200 bg-white p-8 sm:p-10 shadow-sm">
           <div className="mb-8 text-center">
-            <div className="mx-auto w-12 h-12 rounded-lg bg-blue-600 flex items-center justify-center text-white font-bold text-xl mb-4">
-              S
-            </div>
+            <img src={logoMdm} alt="MDM Corretora de Seguros" className="mx-auto h-24 w-auto rounded-lg bg-black mb-4" />
             <h2 className="text-2xl font-bold text-navy">Entrar</h2>
-            <p className="text-gray-600">Acesse sua conta da corretora SEGURPRO</p>
+            <p className="text-gray-600">Acesse sua conta da MDM Corretora de Seguros</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-5">
@@ -129,7 +132,10 @@ export const ForgotPassword = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+    <div
+      className="min-h-screen flex items-center justify-center bg-black bg-cover bg-center px-4"
+      style={{ backgroundImage: `url(${logoMdmBg})` }}
+    >
       <div className="w-full max-w-md">
         <div className="rounded-xl border border-gray-200 bg-white p-8 sm:p-10 shadow-sm">
           <div className="flex items-center gap-3 mb-6">
@@ -185,7 +191,10 @@ export const ForgotPassword = () => {
 export const ResetPassword = () => {
   const navigate = useNavigate();
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+    <div
+      className="min-h-screen flex items-center justify-center bg-black bg-cover bg-center px-4"
+      style={{ backgroundImage: `url(${logoMdmBg})` }}
+    >
       <div className="max-w-md mx-auto py-12 text-center">
         <div className="rounded-xl border border-gray-200 bg-white p-8 shadow-sm mx-auto">
           <h2 className="text-xl font-bold text-navy mb-2">Redefinição de senha</h2>
