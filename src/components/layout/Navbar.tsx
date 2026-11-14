@@ -1,6 +1,6 @@
 import { useAuth } from "@/contexts/AuthContext";
 import { useTheme } from "@/contexts/ThemeContext";
-import logoMdm from "@/assets/logo-mdm.png";
+import { Logo } from "@/components/Logo";
 import { Sun, Moon, Bell, Search } from "lucide-react";
 
 export const Navbar = () => {
@@ -15,7 +15,7 @@ export const Navbar = () => {
     >
       {/* logo só no mobile: no desktop ela já aparece no menu lateral */}
       <div className="flex items-center gap-2 lg:hidden shrink-0">
-        <img src={logoMdm} alt="MDM Corretora de Seguros" className="h-10 w-auto rounded-md bg-black" />
+        <Logo height={28} subtitle={false} />
       </div>
 
       <div className="flex-1 min-w-0 hidden md:flex items-center justify-center">

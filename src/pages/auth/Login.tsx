@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/useToast";
-import logoMdm from "@/assets/logo-mdm.png";
+import { Logo } from "@/components/Logo";
 import logoMdmBg from "@/assets/logo-mdm-bg.jpg";
 import { Mail, Eye, EyeOff, Loader2, ArrowLeft, Mail as MailIcon } from "lucide-react";
 
@@ -40,7 +40,7 @@ export const Login = () => {
       <div className="w-full max-w-md">
         <div className="rounded-xl border border-gray-200 bg-white p-8 sm:p-10 shadow-sm">
           <div className="mb-8 text-center">
-            <img src={logoMdm} alt="MDM Corretora de Seguros" className="mx-auto h-24 w-auto rounded-lg bg-black mb-4" />
+            <Logo height={64} className="mx-auto mb-5" />
             <h2 className="text-2xl font-bold text-navy">Entrar</h2>
             <p className="text-gray-600">Acesse sua conta da MDM Corretora de Seguros</p>
           </div>
